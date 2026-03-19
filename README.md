@@ -14,7 +14,6 @@ Um jogo de sobrevivência e coleta desenvolvido com **Python 3.12** e **Pygame 2
 - **3 Modos de Jogo:** Solo, Co-op e Competitivo.
 - **3 Dificuldades:** Easy, Medium e Hard (selecionáveis no menu).
 - **Ciclo de Fase:** Manhã (Fase 1) e Noite (Fase 2 - Multiplicador x2).
-- **Ativos Restaurados:** Ícones de frutas exclusivos gerados por IA com estilo Pixel Art.
 - **Ranking:** Sistema de Top 10 Scores salvos localmente.
 
 ## 👥 Controles
