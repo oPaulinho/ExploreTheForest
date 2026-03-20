@@ -25,6 +25,3 @@ Um jogo de sobrevivência e coleta desenvolvido com **Python 3.12** e **Pygame 2
 ### Player 2 (Arqueira)
 - **Movimento:** `W`, `A`, `S`, `D`
 - **Corrida:** 'Ctrl Esquerdo'
-
----
-*Desenvolvido em parceria com Antigravity* 🌲🍎👾

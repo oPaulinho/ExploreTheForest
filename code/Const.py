@@ -130,7 +130,7 @@ DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 DIFFICULTY_SETTINGS = {
     'Easy':   {'time_mult': 1.5, 'goal_mult': 0.7},
     'Medium': {'time_mult': 1.0, 'goal_mult': 1.0},
-    'Hard':   {'time_mult': 0.7, 'goal_mult': 1.5}
+    'Hard':   {'time_mult': 0.85, 'goal_mult': 1.35}
 }
 
 # HUD Colors for readability
