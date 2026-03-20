@@ -1,17 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-DBProxy.py: Data access layer for persistent score storage.
-Uses SQLite to store and retrieve the Top 10 rankings.
+DBProxy.py: SQLite abstraction layer for persistent results.
+Camada de abstração SQLite para persistência de resultados.
 """
 import sqlite3
 
 
 class DBProxy:
-    """Proxy class to handle database connection and queries."""
+    """
+    Handles local database connection and basic CRUD for scores.
+    Gerencia conexão local e CRUD básico para pontuações.
+    """
 
     def __init__(self, db_name: str):
-        """Initializes the database and creates the table if it doesn't exist."""
+        """Initializes database and table schema. / Inicializa banco e esquema de tabela."""
         self.db_name = db_name
         self.connection = sqlite3.connect(db_name)
         self.connection.execute('''
@@ -25,7 +28,7 @@ class DBProxy:
         self.connection.commit()
 
     def save(self, score_dict: dict):
-        """Saves a new score entry to the database."""
+        """Inserts a new entry into the ledger. / Insere nova entrada no registro."""
         self.connection.execute(
             'INSERT INTO dados (name, score, date) VALUES (:name, :score, :date)', 
             score_dict
@@ -33,11 +36,11 @@ class DBProxy:
         self.connection.commit()
 
     def retrieve_top10(self) -> list:
-        """Retrieves and returns the Top 10 players ordered by score."""
+        """Fetch winners ordered by highest score. / Busca vencedores por maior pontuação."""
         return self.connection.execute(
             'SELECT * FROM dados ORDER BY score DESC LIMIT 10'
         ).fetchall()
 
     def close(self):
-        """Safely closes the database connection."""
+        """Safely disconnects from the file. / Desconexão segura do arquivo."""
         return self.connection.close()

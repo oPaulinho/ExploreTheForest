@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Player.py: Implementação dos heróis jogáveis.
-Herda de Entity e implementa lógica de animação e entrada do usuário.
+Player.py: Implementation of playable heroes. / Implementação dos heróis jogáveis.
+Specializes Entity to support frame animation and keyboard movement. / Especializa Entity para suportar animação por frames e movimentação por teclado.
 """
 import pygame
 from code.Const import (
@@ -13,13 +13,19 @@ from code.Entity import Entity
 
 
 class Player(Entity):
-    """Entidade controlada pelo jogador com suporte a spritesheets e estados."""
+    """
+    Entity controlled by the player with spritesheet support and states.
+    Entidade controlada pelo jogador com suporte a spritesheets e estados.
+    """
 
     def __init__(self, name: str, position: tuple):
-        """Inicializa o jogador e calibra o bounding box (rect) para o tamanho do frame."""
+        """
+        Initializes the hero and calibrates the Rect dimensions for a single frame.
+        Inicializa o herói e calibra as dimensões do Rect para um único frame.
+        """
         hero_folder = 'Swordsman' if name == 'Player1' else 'Archer'
         
-        # Chamada base para garantir atributos fundamentais
+        # Mandatory call to ensure base attributes. / Chamada base para garantir atributos fundamentais.
         super().__init__(name, position, img_path=f'./asset/players/{hero_folder}/Walk.png')
         
         self.frame_index = 0
@@ -27,19 +33,19 @@ class Player(Entity):
         self.state = 'Walk'
         self.facing_left = False
             
-        # Carregamento de frames individuais do spritesheet
+        # Loading individual animation frames. / Carregamento de frames individuais de animação.
         self.images_walk = self._load_frames(hero_folder, 'Walk', 8)
         self.images_run = self._load_frames(hero_folder, 'Run', 8)
         
-        # AJUSTE CRÍTICO: Atualiza a superfície e o RECT para as dimensões de um frame (100x100)
-        # Sem isso, o rect herda o tamanho da folha inteira, causando bugs de movimento e colisão.
+        # CRITICAL FIX: Update rect to match a single 100x100 frame size.
+        # AJUSTE CRÍTICO: Atualiza o rect para o tamanho de um frame (100x100).
         self.surf = self.images_walk[0]
         self.rect = self.surf.get_rect(left=position[0], top=position[1])
         
         self.speed = ENTITY_SPEED[self.name]
 
     def _load_frames(self, hero_folder, action, num_frames):
-        """Divide a folha de sprites em frames e escala para 100x100."""
+        """Slices the horizontal spritesheet into frames and scales to 100x100. / Fatia a folha de sprites em frames e escala."""
         sheet = pygame.image.load(f'./asset/players/{hero_folder}/{action}.png').convert_alpha()
         width = sheet.get_width() // num_frames
         height = sheet.get_height()
@@ -52,17 +58,17 @@ class Player(Entity):
         return frames
 
     def move(self):
-        """Gerencia movimento por teclado e atualiza a animação visual."""
+        """Handles keyboard input and updates visual animation. / Gerencia entrada de teclado e atualiza animação."""
         pressed_key = pygame.key.get_pressed()
         
-        # Corrida (Sprinting)
+        # Sprint Logic / Lógica de Corrida
         run_key = PLAYER_KEY_RUN[self.name]
         is_running = pressed_key[run_key]
         speed_mult = 2.5 if is_running else 1.0 
         self.state = 'Run' if is_running else 'Walk'
         
         moving = False
-        # Navegação Vertical (Trava na trilha)
+        # Vertical movement (Trapped in forest trail) / Navegação Vertical (Preso na trilha)
         if pressed_key[PLAYER_KEY_UP[self.name]]:
             self.rect.y -= int(self.speed * speed_mult)
             moving = True
@@ -70,7 +76,7 @@ class Player(Entity):
             self.rect.y += int(self.speed * speed_mult)
             moving = True
             
-        # Navegação Horizontal
+        # Horizontal movement / Navegação Horizontal
         if pressed_key[PLAYER_KEY_LEFT[self.name]]:
             self.rect.x -= int(self.speed * speed_mult)
             moving = True
@@ -80,13 +86,13 @@ class Player(Entity):
             moving = True
             self.facing_left = False
 
-        # Restrições de borda de tela
+        # Screen boundaries logic / Restrições de borda de tela
         self.rect.top = max(self.rect.top, int(WIN_HEIGHT * 0.18))
         self.rect.bottom = min(self.rect.bottom, int(WIN_HEIGHT * 0.85))
         self.rect.left = max(self.rect.left, 0)
         self.rect.right = min(self.rect.right, WIN_WIDTH)
             
-        # Atualização de Frames
+        # Animation Frame update / Atualização de Frames
         if moving:
             self.frame_index += self.animation_speed
             anim_list = self.images_run if self.state == 'Run' else self.images_walk
@@ -97,6 +103,6 @@ class Player(Entity):
             self.frame_index = 0
             self.surf = self.images_run[0] if self.state == 'Run' else self.images_walk[0]
             
-        # Orientação do Sprite
+        # Flip sprite for left direction / Inversão de sprite para direção esquerda
         if self.facing_left:
             self.surf = pygame.transform.flip(self.surf, True, False)

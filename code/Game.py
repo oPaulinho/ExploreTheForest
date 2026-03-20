@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Game.py: The main engine orquestrator. 
-Manages the global state machine transitions between the main menu, 
-level execution, and scoreboards.
+Game.py: Main engine orchestrator. / O orquestrador central do motor.
+Manages global state transitions between menu, play and rankings.
+Gerencia transições globais entre menu, gameplay e rankings.
 """
 import sys
 import pygame
@@ -14,51 +14,54 @@ from code.Score import Score
 
 
 class Game:
-    """Root class that initializes Pygame and controls the high-level game flow."""
+    """
+    Core class initializing Pygame and managing high-level flow.
+    Classe núcleo que inicializa o Pygame e gerencia o fluxo de alto nível.
+    """
 
     def __init__(self):
-        """Initializes the window and general Pygame settings."""
+        """Global initialization and window setup. / Inicialização global e setup de janela."""
         pygame.init()
         self.window = pygame.display.set_mode(size=(WIN_WIDTH, WIN_HEIGHT))
         pygame.display.set_caption('Forest Explore')
 
     def run(self):
         """
-        Infinite application loop. Coordinates transitions between different 
-        game segments based on user selection.
+        Infinite application loop coordinating game segments.
+        Loop infinito coordenando os segmentos do jogo.
         """
         while True:
             score = Score(self.window)
             menu = Menu(self.window)
             
-            # 1. Main Menu Interaction
+            # 1. Start with menu interaction / Inicia com interação de menu
             menu_return, difficulty = menu.run()
 
-            # 2. Gameplay Flow (New Game selected)
+            # 2. Main gameplay execution / Execução do gameplay principal
             if menu_return in [MENU_OPTION[0], MENU_OPTION[1], MENU_OPTION[2]]:
-                player_score = [0, 0]  # Local level scores for current run
+                player_score = [0, 0]  # Local session tracking / Track de sessão local
                 win = False
                 
-                # Start Phase 1 (Morning)
+                # Execution of Level 1 (Morning) / Execução Nível 1 (Manhã)
                 level = Level(self.window, 'Level1', menu_return, player_score, difficulty)
                 level_return = level.run(player_score)
                 
-                # Advance to Phase 2 (Night) only if Level1 is passed
+                # Advance only if Level 1 is cleared / Avança apenas se passar do Nível 1
                 if level_return:
                     level = Level(self.window, 'Level2', menu_return, player_score, difficulty)
                     level_return = level.run(player_score)
                     if level_return:
-                        win = True # Both phases cleared
+                        win = True # Full game victory / Vitória total
                 
-                # 3. Post-Game results
+                # 3. Handle results recording / Gravação de resultados
                 score.save(menu_return, player_score, win)
                 score.show()
 
-            # 4. View Scoreboard directly
+            # 4. View Scoreboard directly / Visão direta do Placar
             elif menu_return == MENU_OPTION[3]:
                 score.show()
                 
-            # 5. Exit Application
+            # 5. Safe application termination / Finalização segura
             elif menu_return == MENU_OPTION[4]:
                 pygame.quit(); quit()
             else:

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Level.py: Gerencia o fluxo de uma fase de jogo.
-Lida com herança de entidades e o orquestrador de movimento.
+Level.py: Orchestrates the life cycle of a game phase. / Orquestra o ciclo de vida de uma fase.
+Manages timing, target scores, and active entity sets. / Gerencia tempo, metas e entidades ativas.
 """
 import sys
 import pygame
@@ -16,21 +16,28 @@ from code.Entity import Entity
 
 
 class Level:
-    """Controlador de ambiente e regras de fase."""
+    """
+    Phase manager responsible for victory logic and rendering.
+    Gerenciador de fase responsável pela lógica de vitória e renderização.
+    """
 
     def __init__(self, window, name, game_mode, player_score, difficulty):
+        """Initializes phase state and difficulty modifiers. / Inicializa estado da fase e modificadores."""
         self.window = window
         self.name = name
         self.game_mode = game_mode
         self.difficulty = difficulty
         
+        # Difficulty application / Aplicação de dificuldade
         diff_settings = DIFFICULTY_SETTINGS.get(difficulty, DIFFICULTY_SETTINGS['Medium'])
         self.timeout = int(LEVEL_TIMEOUT[self.name] * diff_settings['time_mult'])
         self.target_score = int(LEVEL_TARGET_SCORE[self.name] * diff_settings['goal_mult'])
 
         self.entity_list = []
+        # Factory standardization / Padronização da Factory
         self.entity_list.extend(EntityFactory.get_entity(self.name + 'Bg'))
         
+        # Phase settings (Morning/Night) / Configurações de fase
         self.message_timer = 3000 
         if name == 'Level1':
             self.message = "Welcome! Started the Morning. Good luck!"
@@ -41,6 +48,7 @@ class Level:
             self.score_mult = 2
             self.spawn_interval = int(SPAWN_TIME * 1.3)
 
+        # Player inclusion / Inclusão de jogadores
         p1_list = EntityFactory.get_entity('Player1')
         p1_list[0].score = 0
         self.entity_list.extend(p1_list)
@@ -54,6 +62,7 @@ class Level:
         pygame.time.set_timer(EVENT_TIMEOUT, TIMEOUT_STEP)
 
     def run(self, player_score):
+        """Main phase loop until victory or timeout. / Loop principal até vitória ou tempo esgotado."""
         song = 'level_1.mp3' if self.name == 'Level1' else 'level_2.mp3'
         pygame.mixer_music.load(f'./asset/{song}')
         pygame.mixer_music.play(-1)
@@ -63,15 +72,16 @@ class Level:
             clock.tick(60)
             self.window.fill((0, 0, 0))
 
+            # Update and blit cycle / Ciclo de atualização e renderização
             for ent in self.entity_list:
-                # Agora Background e Item também são entidades, 
-                # mas mantemos a lógica de exclusão de movimento autônomo.
+                # Exclude autonomous movement for Background/Item / Exclui movimento autônomo
                 if not isinstance(ent, (Background, Item)):
                     ent.move() 
 
                 self.window.blit(ent.surf, ent.rect)
 
-                if self.game_mode == MENU_OPTION[1]:
+                # HUD Scoring Interface / Interface de Pontuação
+                if self.game_mode == MENU_OPTION[1]: # Co-op / Cooperativo
                     team_score = sum(e.score for e in self.entity_list if isinstance(e, Player))
                     self.level_text(24, f'TEAM Score: {team_score}', HUD_COLOR_P1, (20, 50))
                 else:
@@ -80,6 +90,7 @@ class Level:
                     if ent.name == 'Player2':
                         self.level_text(24, f'P2 Score: {ent.score}', HUD_COLOR_P2, (20, 90))
 
+            # HUD Statics / Elementos Fixos do HUD
             self.level_text(20, f'{self.name} - {self.timeout / 1000:.1f}s', C_WHITE, (20, 15))
             self.level_text(20, f'Goal: {self.target_score}', C_YELLOW, (WIN_WIDTH - 150, 15))
             
@@ -106,6 +117,7 @@ class Level:
                         self.message_timer -= TIMEOUT_STEP
                         
                     if self.timeout <= 0:
+                        # Final scoring verification / Verificação final de pontos
                         p1_score = 0
                         p2_score = 0
                         for ent in self.entity_list:
@@ -130,6 +142,7 @@ class Level:
                         return False
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple, center=False):
+        """Text rendering helper for fixed or centered alignment. / Auxiliar de renderização de texto."""
         font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size, bold=True)
         render_text = font.render(text, True, text_color)
         if center:

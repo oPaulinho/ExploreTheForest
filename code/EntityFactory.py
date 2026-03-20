@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-EntityFactory.py: Padroniza a criação de objetos do jogo. 
-Sempre retorna listas de entidades para facilitar a iteração no loop de nível.
+EntityFactory.py: Standardizes object creation. / Padroniza a criação de objetos.
+Always returns entity lists to simplify iteration in level loops. / Retorna listas para facilitar a iteração no loop de nível.
 """
 import random
 from code.Background import Background
@@ -12,18 +12,15 @@ from code.Item import Item
 
 
 class EntityFactory:
-    """Fábrica estática para instanciar jogadores, itens e fundos."""
+    """
+    Static factory to instantiate players, items, and backgrounds.
+    Fábrica estática para instanciar jogadores, itens e fundos.
+    """
 
     @staticmethod
     def get_entity(entity_name: str) -> list:
         """
-        Gera e retorna a entidade solicitada sempre dentro de uma lista.
-        
-        Args:
-            entity_name (str): Nome identificador da entidade.
-            
-        Returns:
-            list: Lista contendo a(s) instância(s) criada(s).
+        Returns requested entity wrapped in a list. / Retorna a entidade solicitada sempre em uma lista.
         """
         match entity_name:
 
@@ -40,7 +37,7 @@ class EntityFactory:
                 return [Player('Player2', (10, WIN_HEIGHT / 2 + 30))]
 
             case 'Item':
-                # Cria um item em posição randômica válida
+                # Spawn item at valid random position / Spawn em posição randômica válida
                 return [Item(
                     'Item',
                     (random.randint(40, WIN_WIDTH - 40), 
