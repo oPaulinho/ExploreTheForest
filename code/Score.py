@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Score.py: Manages the display and saving of player scores.
-Connects with a database proxy for persistent results.
+Score.py: Gerencia a exibição e o salvamento dos placares dos jogadores.
 """
 import sys
 from datetime import datetime
@@ -16,24 +15,13 @@ from code.DBProxy import DBProxy
 
 
 class Score:
-    """Class to handle the Scoreboard and score recording."""
-
     def __init__(self, window: Surface):
-        """Initializes score screen background."""
         self.window = window
         self.surf = pygame.image.load('./asset/background/PNG/game_background_2/game_background_2.png').convert_alpha()
         self.surf = pygame.transform.scale(self.surf, (WIN_WIDTH, WIN_HEIGHT))
         self.rect = self.surf.get_rect(left=0, top=0)
 
     def save(self, game_mode: str, player_score: list[int], win: bool):
-        """
-        Interactive screen to input player/team name and save to database.
-        
-        Args:
-            game_mode (str): Mode used during the game.
-            player_score (list[int]): Final scores of P1 and P2.
-            win (bool): Whether the game ended in victory.
-        """
         pygame.mixer_music.load('./asset/theme.mp3')
         pygame.mixer_music.play(-1)
 
@@ -46,29 +34,27 @@ class Score:
             title = 'YOU WIN !!' if win else 'YOU DIED ...'
             self.score_text(48, title, C_YELLOW, SCORE_POS['Title'])
 
-            # Calculation Logic
             score = player_score[0]
             text = 'Enter Player 1 name (4 characters):'
 
-            if game_mode == MENU_OPTION[1]: # Co-op saves SUM
+            if game_mode == MENU_OPTION[1]: 
                 score = (player_score[0] + player_score[1])
                 text = 'Enter Team name (4 characters):'
 
-            if game_mode == MENU_OPTION[2]: # Competitive saves WINNER
+            if game_mode == MENU_OPTION[2]: 
                 if player_score[1] > player_score[0]:
                     score = player_score[1]
-                    text = 'Enter Player 2  name (4 characters):'
+                    text = 'Enter Player 2 name (4 characters):'
 
             self.score_text(20, text, C_WHITE, SCORE_POS['EnterName'])
 
-            # Input Handling
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit(); sys.exit()
                 if event.type == KEYDOWN:
                     if event.key == K_RETURN and len(name) == 4:
                         db_proxy.save({
-                            'name': name,
+                            'name': name.upper(), # Auto-uppercase to look better
                             'score': score,
                             'date': get_formatted_date()
                         })
@@ -81,11 +67,10 @@ class Score:
                         if len(name) < 4:
                             name += event.unicode
 
-            self.score_text(20, name, C_WHITE, SCORE_POS['Name'])
+            self.score_text(20, name.upper(), C_WHITE, SCORE_POS['Name'])
             pygame.display.flip()
 
     def show(self):
-        """Displays the Top 10 scores from the database."""
         pygame.mixer_music.load('./asset/theme.mp3')
         pygame.mixer_music.play(-1)
 
@@ -97,11 +82,15 @@ class Score:
         while running:
             self.window.blit(source=self.surf, dest=self.rect)
             self.score_text(48, 'TOP 10 SCORE', C_YELLOW, SCORE_POS['Title'])
+            # Improved spacing in Label for better alignment
             self.score_text(20, 'NAME       SCORE           DATE        ', C_YELLOW, SCORE_POS['Label'])
 
-            for player_score in list_score:
+            for i, player_score in enumerate(list_score):
                 id_, name, score, date = player_score
-                self.score_text(20, f'{name}    {score:05d}      {date}', C_YELLOW, SCORE_POS[list_score.index(player_score)])
+                # Fixed string formatting for precise column alignment
+                # Using spaces to align with the 'NAME SCORE DATE' header
+                formatted_score = f"{name:4s}       {score:05d}       {date}"
+                self.score_text(20, formatted_score, C_YELLOW, SCORE_POS[i])
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -112,7 +101,6 @@ class Score:
             pygame.display.flip()
 
     def score_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
-        """Helper to render text for the score screen."""
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
@@ -120,7 +108,6 @@ class Score:
 
 
 def get_formatted_date():
-    """Returns current date and time as a string."""
     current_datetime = datetime.now()
     current_time = current_datetime.strftime("%H:%M")
     current_date = current_datetime.strftime("%d/%m/%Y")

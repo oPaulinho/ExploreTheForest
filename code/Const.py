@@ -63,7 +63,6 @@ PLAYER_KEY_RIGHT = {'Player1': pygame.K_RIGHT, 'Player2': pygame.K_d}
 PLAYER_KEY_RUN = {'Player1': pygame.K_RCTRL, 'Player2': pygame.K_LCTRL}
 
 # --- TIMING E JOGABILIDADE ---
-# Restaurado para 3000ms para evitar excesso de frutas e manter o desafio
 SPAWN_TIME = 3000 
 TIMEOUT_STEP = 100 
 LEVEL_TIMEOUT = {'Level1': 30000, 'Level2': 60000}
@@ -73,7 +72,6 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 450
 
 # --- METAS DE PONTUAÇÃO ---
-# Mantendo as metas que exigem precisão com o novo SPAWN_TIME
 LEVEL_TARGET_SCORE = {'Level1': 1500, 'Level2': 2500}
 
 # --- BALANCEAMENTO DE DIFICULDADE ---
@@ -81,7 +79,7 @@ DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 DIFFICULTY_SETTINGS = {
     'Easy':   {'time_mult': 1.5, 'goal_mult': 0.7},
     'Medium': {'time_mult': 1.0, 'goal_mult': 1.0},
-    'Hard':   {'time_mult': 0.85, 'goal_mult': 1.35} # Mantendo um Hard desafiador mas possível
+    'Hard':   {'time_mult': 0.98, 'goal_mult': 1.16} # Ajustado pelo usuário
 }
 
 # --- CORES DO HUD ---
@@ -89,13 +87,14 @@ HUD_COLOR_P1 = C_YELLOW
 HUD_COLOR_P2 = C_WHITE
 
 # --- POSICIONAMENTO DO PLACAR ---
+# Vertical spacing increased to avoid overlapping (Title -> 100 -> 130 -> 160...)
 SCORE_POS = {
     'Title': (WIN_WIDTH / 2, 50),
-    'EnterName': (WIN_WIDTH / 2, 80),
-    'Label': (WIN_WIDTH / 2, 100),
-    'Name': (WIN_WIDTH / 2, 120),
-    0: (WIN_WIDTH / 2, 110), 1: (WIN_WIDTH / 2, 130), 2: (WIN_WIDTH / 2, 150),
-    3: (WIN_WIDTH / 2, 170), 4: (WIN_WIDTH / 2, 190), 5: (WIN_WIDTH / 2, 210),
-    6: (WIN_WIDTH / 2, 230), 7: (WIN_WIDTH / 2, 250), 8: (WIN_WIDTH / 2, 270),
-    9: (WIN_WIDTH / 2, 290),
+    'EnterName': (WIN_WIDTH / 2, 100),
+    'Label': (WIN_WIDTH / 2, 110),
+    'Name': (WIN_WIDTH / 2, 150),
+    0: (WIN_WIDTH / 2, 150), 1: (WIN_WIDTH / 2, 175), 2: (WIN_WIDTH / 2, 200),
+    3: (WIN_WIDTH / 2, 225), 4: (WIN_WIDTH / 2, 250), 5: (WIN_WIDTH / 2, 275),
+    6: (WIN_WIDTH / 2, 300), 7: (WIN_WIDTH / 2, 325), 8: (WIN_WIDTH / 2, 350),
+    9: (WIN_WIDTH / 2, 375),
 }
