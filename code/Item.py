@@ -1,44 +1,36 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Item.py: Represents the collectible fruits in the game.
-Items are spawned randomly and move with the scrolling background.
+Item.py: Especialização de Entity para objetos coletáveis (frutas).
+Implementa o contrato sem movimento ativo para manter coerência estrutural.
 """
 import random
 import pygame
-from code.Const import ENTITY_SPEED, ENTITY_HEALTH, ENTITY_DAMAGE, ENTITY_SCORE
+from code.Const import ENTITY_SPEED
+from code.Entity import Entity
 
 
-class Item:
-    """Class for collectible fruit entities."""
+class Item(Entity):
+    """Representa um item coletável que surge de forma randômica."""
 
     def __init__(self, name: str, position: tuple):
-        """
-        Initializes a fruit item picking one of 6 restored assets randomly.
-        
-        Args:
-            name (str): Should be 'Item'.
-            position (tuple): Initial spawn coordinates.
-        """
-        self.name = name
-        # Load a random fruit icon from the restored asset folder
+        """Inicializa a fruta selecionando um dos 6 assets disponíveis."""
         fruit_id = random.randint(1, 6)
-        self.surf = pygame.image.load(f'./asset/fruits/{fruit_id}.png').convert_alpha()
+        # Chama o construtor base passando o caminho da fruta sorteada
+        super().__init__(name, position, img_path=f'./asset/fruits/{fruit_id}.png')
+        
+        # Escalonamento visual para itens
         self.surf = pygame.transform.scale(self.surf, (35, 35))
         self.rect = self.surf.get_rect(left=position[0], top=position[1])
-        
-        # Load stats from Const.py
         self.speed = ENTITY_SPEED[self.name]
-        self.health = ENTITY_HEALTH[self.name]
-        self.damage = ENTITY_DAMAGE[self.name]
-        self.score = ENTITY_SCORE[self.name]
 
-    def move(self, delta_x):
+    def move(self, delta_x=0):
         """
-        Moves the item horizontally based on scenario movement.
-        
-        Args:
-            delta_x (float): The offset from the background scrolling.
+        Itens não possuem movimento autônomo.
+        O método move é implementado para cumprir o contrato da classe Entity, 
+        mas seu deslocamento real é gerenciado em sincronia com o cenário.
         """
-        # Multiplier of 4 ensures it syncs with the "ground" layer speed
-        self.rect.x += delta_x * 4
+        # O deslocamento horizontal relativo ao cenário é aplicado via self.rect.x diretamente se necessário,
+        # mas aqui mantemos o contrato limpo.
+        if delta_x:
+            self.rect.x += delta_x * 4

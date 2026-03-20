@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-EntityFactory.py: Responsible for instantiating game entities (Players, Items, Backgrounds)
-based on their string names. This centralizes object creation.
+EntityFactory.py: Padroniza a criação de objetos do jogo. 
+Sempre retorna listas de entidades para facilitar a iteração no loop de nível.
 """
 import random
 from code.Background import Background
@@ -12,18 +12,18 @@ from code.Item import Item
 
 
 class EntityFactory:
-    """Static factory class for entity instantiation."""
+    """Fábrica estática para instanciar jogadores, itens e fundos."""
 
     @staticmethod
-    def get_entity(entity_name: str):
+    def get_entity(entity_name: str) -> list:
         """
-        Creates and returns an instance of the requested entity.
+        Gera e retorna a entidade solicitada sempre dentro de uma lista.
         
         Args:
-            entity_name (str): Name of the entity to create ('Player1', 'Item', etc.)
+            entity_name (str): Nome identificador da entidade.
             
         Returns:
-            list or Entity: A list containing the entity (for backgrounds) or the entity instance.
+            list: Lista contendo a(s) instância(s) criada(s).
         """
         match entity_name:
 
@@ -34,15 +34,16 @@ class EntityFactory:
                 return [Background('Level2Bg', (0, 0))]
 
             case 'Player1':
-                return Player('Player1', (10, WIN_HEIGHT / 2 - 30))
+                return [Player('Player1', (10, WIN_HEIGHT / 2 - 30))]
 
             case 'Player2':
-                return Player('Player2', (10, WIN_HEIGHT / 2 + 30))
+                return [Player('Player2', (10, WIN_HEIGHT / 2 + 30))]
 
             case 'Item':
-                # Re-spawns fruits at random heights and screen positions
-                return Item(
+                # Cria um item em posição randômica válida
+                return [Item(
                     'Item',
                     (random.randint(40, WIN_WIDTH - 40), 
                      random.randint(int(WIN_HEIGHT * 0.25), int(WIN_HEIGHT * 0.82)))
-                )
+                )]
+        return []
