@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Score.py: Gerencia a exibição e o salvamento dos placares dos jogadores.
+Score.py: Manages the display and saving of player scores.
+Connects with a database proxy for persistent results.
 """
 import sys
 from datetime import datetime

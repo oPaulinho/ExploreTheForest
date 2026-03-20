@@ -63,6 +63,7 @@ PLAYER_KEY_RIGHT = {'Player1': pygame.K_RIGHT, 'Player2': pygame.K_d}
 PLAYER_KEY_RUN = {'Player1': pygame.K_RCTRL, 'Player2': pygame.K_LCTRL}
 
 # --- TIMING E JOGABILIDADE ---
+# Restaurado para 3000ms para evitar excesso de frutas e manter o desafio
 SPAWN_TIME = 3000 
 TIMEOUT_STEP = 100 
 LEVEL_TIMEOUT = {'Level1': 30000, 'Level2': 60000}
@@ -72,6 +73,7 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 450
 
 # --- METAS DE PONTUAÇÃO ---
+# Mantendo as metas que exigem precisão com o novo SPAWN_TIME
 LEVEL_TARGET_SCORE = {'Level1': 1500, 'Level2': 2500}
 
 # --- BALANCEAMENTO DE DIFICULDADE ---
@@ -79,15 +81,14 @@ DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 DIFFICULTY_SETTINGS = {
     'Easy':   {'time_mult': 1.5, 'goal_mult': 0.7},
     'Medium': {'time_mult': 1.0, 'goal_mult': 1.0},
-    'Hard':   {'time_mult': 0.98, 'goal_mult': 1.16} # Ajustado pelo usuário
+    'Hard':   {'time_mult': 0.98, 'goal_mult': 1.16} 
 }
 
 # --- CORES DO HUD ---
 HUD_COLOR_P1 = C_YELLOW
 HUD_COLOR_P2 = C_WHITE
 
-# --- POSICIONAMENTO DO PLACAR ---
-# Vertical spacing increased to avoid overlapping (Title -> 100 -> 130 -> 160...)
+
 SCORE_POS = {
     'Title': (WIN_WIDTH / 2, 50),
     'EnterName': (WIN_WIDTH / 2, 100),
