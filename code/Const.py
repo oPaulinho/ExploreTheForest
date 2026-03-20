@@ -1,16 +1,24 @@
-# C
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Const.py: Centralized game constants including colors, screen dimensions, 
+event IDs, entity stats, and difficulty settings.
+"""
 import pygame
 
+# --- COLOR CONSTANTS ---
 C_ORANGE = (255, 128, 0)
 C_WHITE = (255, 255, 255)
 C_YELLOW = (255, 255, 0)
 C_GREEN = (0, 128, 0)
 C_CYAN = (0, 128, 128)
 
-# E
+# --- EVENT IDS ---
 EVENT_SPAWN = pygame.USEREVENT + 1
 EVENT_TIMEOUT = pygame.USEREVENT + 2
 
+# --- ENTITY STATISTICS ---
+# Movement speed for each entity type (Background layers, Players, Items)
 ENTITY_SPEED = {
     'bg4_back_land': 1,
     'bg4_back_decor': 2,
@@ -27,6 +35,7 @@ ENTITY_SPEED = {
     'Item': 2,
 }
 
+# Initial health points
 ENTITY_HEALTH = {
     'bg4_back_land': 999,
     'bg4_back_decor': 999,
@@ -43,6 +52,7 @@ ENTITY_HEALTH = {
     'Item': 1,
 }
 
+# Damage dealt by entities
 ENTITY_DAMAGE = {
     'bg4_back_land': 0,
     'bg4_back_decor': 0,
@@ -59,6 +69,7 @@ ENTITY_DAMAGE = {
     'Item': 0,
 }
 
+# Points awarded for interacting with entities
 ENTITY_SCORE = {
     'bg4_back_land': 0,
     'bg4_back_decor': 0,
@@ -75,14 +86,14 @@ ENTITY_SCORE = {
     'Item': 100,
 }
 
-# M
+# --- UI & MENU ---
 MENU_OPTION = ('NEW_GAME 1P',
                'NEW_GAME 2P - COOPERATIVE',
                'NEW_GAME 2P - COMPETITIVE',
                'SCORE',
                'EXIT')
 
-# K
+# --- PLAYER CONTROLS ---
 PLAYER_KEY_UP = {'Player1': pygame.K_UP,
                  'Player2': pygame.K_w}
 PLAYER_KEY_DOWN = {'Player1': pygame.K_DOWN,
@@ -91,21 +102,20 @@ PLAYER_KEY_LEFT = {'Player1': pygame.K_LEFT,
                    'Player2': pygame.K_a}
 PLAYER_KEY_RIGHT = {'Player1': pygame.K_RIGHT,
                     'Player2': pygame.K_d}
-PLAYER_KEY_RUN = {'Player1': pygame.K_RCTRL,
-                  'Player2': pygame.K_LCTRL}
+# Run/Sprint keys (Shift for P2, Numeric Enter for P1)
+PLAYER_KEY_RUN = {'Player1': pygame.K_KP_ENTER,
+                  'Player2': pygame.K_LSHIFT}
 
-# S
-SPAWN_TIME = 3000
+# --- TIMING & SPAWNING ---
+SPAWN_TIME = 1000  # Default fruit spawn interval in ms
+TIMEOUT_STEP = 100  # 100ms refresh step for hunger/timer
+LEVEL_TIMEOUT = {'Level1': 30000, 'Level2': 60000}  # Base Duration (ms)
 
-# T
-TIMEOUT_STEP = 100  # 100ms
-LEVEL_TIMEOUT = {'Level1': 30000, 'Level2': 60000}  # Base time per level
-
-# W
+# --- WINDOW SETTINGS ---
 WIN_WIDTH = 800
 WIN_HEIGHT = 450
 
-# S
+# --- SCREEN POSITIONS ---
 SCORE_POS = {'Title': (WIN_WIDTH / 2, 50),
              'EnterName': (WIN_WIDTH / 2, 80),
              'Label': (WIN_WIDTH / 2, 90),
@@ -122,17 +132,18 @@ SCORE_POS = {'Title': (WIN_WIDTH / 2, 50),
              9: (WIN_WIDTH / 2, 290),
              }
 
-# Target scores to advance (points per level)
+# --- GAMEPLAY GOALS ---
+# Target scores to advance to next phase
 LEVEL_TARGET_SCORE = {'Level1': 1500, 'Level2': 2500}
 
-# Difficulty Settings
+# --- DIFFICULTY SCALING ---
 DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 DIFFICULTY_SETTINGS = {
     'Easy':   {'time_mult': 1.5, 'goal_mult': 0.7},
     'Medium': {'time_mult': 1.0, 'goal_mult': 1.0},
-    'Hard':   {'time_mult': 0.85, 'goal_mult': 1.35}
+    'Hard':   {'time_mult': 0.95, 'goal_mult': 1.2}
 }
 
-# HUD Colors for readability
+# --- READABILITY ---
 HUD_COLOR_P1 = C_YELLOW
 HUD_COLOR_P2 = C_WHITE
