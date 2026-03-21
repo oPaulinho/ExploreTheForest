@@ -9,7 +9,10 @@ import sys
 from pygame.font import Font
 from pygame.rect import Rect
 from pygame.surface import Surface
-from code.Const import WIN_WIDTH, WIN_HEIGHT, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, DIFFICULTY_LEVELS
+from code.Const import (
+    WIN_WIDTH, WIN_HEIGHT, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW, 
+    DIFFICULTY_LEVELS
+)
 
 
 class Menu:
@@ -20,7 +23,8 @@ class Menu:
     def __init__(self, window):
         """Pre-loads window reference and background assets. / Pré-carrega janela e assets de fundo."""
         self.window = window
-        self.surf = pygame.image.load('./asset/background/PNG/game_background_3/game_background_3.png').convert_alpha()
+        bg_path = './asset/background/PNG/game_background_3/game_background_3.png'
+        self.surf = pygame.image.load(bg_path).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, (WIN_WIDTH, WIN_HEIGHT))
         self.rect = self.surf.get_rect(left=0, top=0)
 
@@ -45,7 +49,8 @@ class Menu:
             # Input handling / Gerenciamento de entradas
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit(); sys.exit()
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN:
                          menu_option = (menu_option + 1) % len(MENU_OPTION)
@@ -73,7 +78,8 @@ class Menu:
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit(); sys.exit()
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_DOWN:
                         diff_option = (diff_option + 1) % len(DIFFICULTY_LEVELS)

@@ -71,8 +71,8 @@ PLAYER_KEY_RUN = {'Player1': pygame.K_RCTRL, 'Player2': pygame.K_LCTRL}
 
 # --- TIMING AND GAMEPLAY / TIMING E JOGABILIDADE ---
 # Restored to 3000ms to keep original challenge / Restaurado para 3000ms para manter o desafio original
-SPAWN_TIME = 3000 
-TIMEOUT_STEP = 100 
+SPAWN_TIME = 3000
+TIMEOUT_STEP = 100
 LEVEL_TIMEOUT = {'Level1': 30000, 'Level2': 60000}
 
 # --- SCREEN DIMENSIONS / DIMENSÕES DA TELA ---
@@ -87,7 +87,7 @@ DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 DIFFICULTY_SETTINGS = {
     'Easy':   {'time_mult': 1.5, 'goal_mult': 0.7},
     'Medium': {'time_mult': 1.0, 'goal_mult': 1.0},
-    'Hard':   {'time_mult': 0.98, 'goal_mult': 1.16} 
+    'Hard':   {'time_mult': 0.98, 'goal_mult': 1.16}
 }
 
 # --- HUD COLORS / CORES DO HUD ---

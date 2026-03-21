@@ -51,7 +51,7 @@ class Game:
                     level = Level(self.window, 'Level2', menu_return, player_score, difficulty)
                     level_return = level.run(player_score)
                     if level_return:
-                        win = True # Full game victory / Vitória total
+                        win = True  # Full game victory / Vitória total
                 
                 # 3. Handle results recording / Gravação de resultados
                 score.save(menu_return, player_score, win)
@@ -63,6 +63,8 @@ class Game:
                 
             # 5. Safe application termination / Finalização segura
             elif menu_return == MENU_OPTION[4]:
-                pygame.quit(); quit()
+                pygame.quit()
+                quit()
             else:
-                pygame.quit(); sys.exit()
+                pygame.quit()
+                sys.exit()

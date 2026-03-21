@@ -6,7 +6,11 @@ Manages timing, target scores, and active entity sets. / Gerencia tempo, metas e
 """
 import sys
 import pygame
-from code.Const import *
+from code.Const import (
+    DIFFICULTY_SETTINGS, LEVEL_TIMEOUT, LEVEL_TARGET_SCORE, SPAWN_TIME,
+    EVENT_SPAWN, EVENT_TIMEOUT, TIMEOUT_STEP, MENU_OPTION, HUD_COLOR_P1,
+    HUD_COLOR_P2, C_WHITE, C_YELLOW, WIN_WIDTH, WIN_HEIGHT, C_GREEN
+)
 from code.EntityFactory import EntityFactory
 from code.EntityMediator import EntityMediator
 from code.Player import Player
@@ -81,7 +85,7 @@ class Level:
                 self.window.blit(ent.surf, ent.rect)
 
                 # HUD Scoring Interface / Interface de Pontuação
-                if self.game_mode == MENU_OPTION[1]: # Co-op / Cooperativo
+                if self.game_mode == MENU_OPTION[1]:  # Co-op / Cooperativo
                     team_score = sum(e.score for e in self.entity_list if isinstance(e, Player))
                     self.level_text(24, f'TEAM Score: {team_score}', HUD_COLOR_P1, (20, 50))
                 else:
@@ -103,7 +107,8 @@ class Level:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit(); sys.exit()
+                    pygame.quit()
+                    sys.exit()
 
                 if event.type == EVENT_SPAWN:
                     if len([e for e in self.entity_list if isinstance(e, Item)]) < 30:
@@ -121,8 +126,10 @@ class Level:
                         p1_score = 0
                         p2_score = 0
                         for ent in self.entity_list:
-                            if ent.name == 'Player1': p1_score = ent.score
-                            if ent.name == 'Player2': p2_score = ent.score
+                            if ent.name == 'Player1':
+                                p1_score = ent.score
+                            if ent.name == 'Player2':
+                                p2_score = ent.score
 
                         current_score = p1_score + p2_score if self.game_mode == MENU_OPTION[1] else p1_score
                         
@@ -141,9 +148,11 @@ class Level:
                             return True
                         return False
 
-    def level_text(self, text_size: int, text: str, text_color: tuple, text_pos: tuple, center=False):
+    def level_text(self, text_size: int, text: str, text_color: tuple,
+                   text_pos: tuple, center=False):
         """Text rendering helper for fixed or centered alignment. / Auxiliar de renderização de texto."""
-        font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size, bold=True)
+        font_name = "Lucida Sans Typewriter"
+        font = pygame.font.SysFont(name=font_name, size=text_size, bold=True)
         render_text = font.render(text, True, text_color)
         if center:
             pos = render_text.get_rect(center=text_pos)

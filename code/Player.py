@@ -26,7 +26,8 @@ class Player(Entity):
         hero_folder = 'Swordsman' if name == 'Player1' else 'Archer'
         
         # Mandatory call to ensure base attributes. / Chamada base para garantir atributos fundamentais.
-        super().__init__(name, position, img_path=f'./asset/players/{hero_folder}/Walk.png')
+        img_path = f'./asset/players/{hero_folder}/Walk.png'
+        super().__init__(name, position, img_path=img_path)
         
         self.frame_index = 0
         self.animation_speed = 0.2
@@ -46,7 +47,8 @@ class Player(Entity):
 
     def _load_frames(self, hero_folder, action, num_frames):
         """Slices the horizontal spritesheet into frames and scales to 100x100. / Fatia a folha de sprites em frames e escala."""
-        sheet = pygame.image.load(f'./asset/players/{hero_folder}/{action}.png').convert_alpha()
+        img_path = f'./asset/players/{hero_folder}/{action}.png'
+        sheet = pygame.image.load(img_path).convert_alpha()
         width = sheet.get_width() // num_frames
         height = sheet.get_height()
         
@@ -64,7 +66,7 @@ class Player(Entity):
         # Sprint Logic / Lógica de Corrida
         run_key = PLAYER_KEY_RUN[self.name]
         is_running = pressed_key[run_key]
-        speed_mult = 2.5 if is_running else 1.0 
+        speed_mult = 2.5 if is_running else 1.0
         self.state = 'Run' if is_running else 'Walk'
         
         moving = False

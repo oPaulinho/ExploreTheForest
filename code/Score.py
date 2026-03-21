@@ -23,7 +23,8 @@ class Score:
     def __init__(self, window: Surface):
         """Initializes score background graphics. / Inicializa gráficos da tela de score."""
         self.window = window
-        self.surf = pygame.image.load('./asset/background/PNG/game_background_2/game_background_2.png').convert_alpha()
+        bg_path = './asset/background/PNG/game_background_2/game_background_2.png'
+        self.surf = pygame.image.load(bg_path).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, (WIN_WIDTH, WIN_HEIGHT))
         self.rect = self.surf.get_rect(left=0, top=0)
 
@@ -45,11 +46,11 @@ class Score:
             score = player_score[0]
             text = 'Enter Player 1 name (4 characters):'
 
-            if game_mode == MENU_OPTION[1]: # Co-op saves SUM / Soma em Cooperativo
+            if game_mode == MENU_OPTION[1]:  # Co-op saves SUM / Soma em Cooperativo
                 score = (player_score[0] + player_score[1])
                 text = 'Enter Team name (4 characters):'
 
-            if game_mode == MENU_OPTION[2]: # Competitive saves WINNER / Salva vencedor
+            if game_mode == MENU_OPTION[2]:  # Competitive saves WINNER / Salva vencedor
                 if player_score[1] > player_score[0]:
                     score = player_score[1]
                     text = 'Enter Player 2 name (4 characters):'
@@ -59,7 +60,8 @@ class Score:
             # Character input handler / Gerencia input de caracteres
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit(); sys.exit()
+                    pygame.quit()
+                    sys.exit()
                 if event.type == KEYDOWN:
                     if event.key == K_RETURN and len(name) == 4:
                         db_proxy.save({
@@ -102,7 +104,8 @@ class Score:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit(); sys.exit()
+                    pygame.quit()
+                    sys.exit()
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
@@ -110,7 +113,8 @@ class Score:
 
     def score_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         """Helper for score-formatted text. / Auxiliar para textos do placar."""
-        text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
+        font_name = "Lucida Sans Typewriter"
+        text_font: Font = pygame.font.SysFont(name=font_name, size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
         self.window.blit(source=text_surf, dest=text_rect)
