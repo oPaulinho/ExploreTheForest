@@ -42,7 +42,8 @@ class Level:
         self.entity_list.extend(EntityFactory.get_entity(self.name + 'Bg'))
         
         # Phase settings (Morning/Night) / Configurações de fase
-        self.message_timer = 3000 
+        self.message_timer = 3000
+        self.instruction_timer = 5000  # 5-second initial pause for controls / Pausa inicial para controles
         if name == 'Level1':
             self.message = "Welcome! Started the Morning. Good luck!"
             self.score_mult = 1
@@ -78,9 +79,11 @@ class Level:
 
             # Update and blit cycle / Ciclo de atualização e renderização
             for ent in self.entity_list:
-                # Exclude autonomous movement for Background/Item / Exclui movimento autônomo
-                if not isinstance(ent, (Background, Item)):
-                    ent.move() 
+                # Move only after instructions / Move apenas após instruções
+                if self.instruction_timer <= 0:
+                    # Exclude autonomous movement for Background/Item / Exclui movimento autônomo
+                    if not isinstance(ent, (Background, Item)):
+                        ent.move()
 
                 self.window.blit(ent.surf, ent.rect)
 
@@ -101,6 +104,10 @@ class Level:
             if self.message_timer > 0:
                 self.level_text(30, self.message, C_YELLOW, (WIN_WIDTH / 2, WIN_HEIGHT / 2), center=True)
 
+            # Control Instructions Overlay / Overlay de Instruções de Comando
+            if self.instruction_timer > 0:
+                self.draw_instructions()
+
             pygame.display.flip()
             EntityMediator.verify_collision(self.entity_list)
             EntityMediator.verify_health(self.entity_list)
@@ -117,9 +124,12 @@ class Level:
                         self.entity_list.extend(new_item_list)
 
                 if event.type == EVENT_TIMEOUT:
-                    self.timeout -= TIMEOUT_STEP
-                    if self.message_timer > 0:
-                        self.message_timer -= TIMEOUT_STEP
+                    if self.instruction_timer > 0:
+                        self.instruction_timer -= TIMEOUT_STEP
+                    else:
+                        self.timeout -= TIMEOUT_STEP
+                        if self.message_timer > 0:
+                            self.message_timer -= TIMEOUT_STEP
                         
                     if self.timeout <= 0:
                         # Final scoring verification / Verificação final de pontos
@@ -159,3 +169,22 @@ class Level:
             self.window.blit(render_text, pos)
         else:
             self.window.blit(render_text, text_pos)
+
+    def draw_instructions(self):
+        """Displays movement controls overlay. / Exibe overlay de controles de movimento."""
+        # Simple semi-transparent background for readability / Fundo semi-transparente
+        overlay = pygame.Surface((WIN_WIDTH, 120))
+        overlay.set_alpha(180)
+        overlay.fill((0, 0, 0))
+        self.window.blit(overlay, (0, WIN_HEIGHT - 120))
+
+        # Player 1 Instructions
+        self.level_text(18, "P1: Walk: ↑ ↓ ← →", C_WHITE, (50, WIN_HEIGHT - 100))
+        self.level_text(18, "P1: Run: R.CTRL + ↑ ↓ ← →", C_WHITE, (50, WIN_HEIGHT - 70))
+
+        # Player 2 Instructions (if mode requires)
+        if self.game_mode in [MENU_OPTION[1], MENU_OPTION[2]]:
+            self.level_text(18, "P2: Walk: W A S D", C_WHITE, (WIN_WIDTH - 300, WIN_HEIGHT - 100))
+            self.level_text(18, "P2: Run: L.CTRL + W A S D", C_WHITE, (WIN_WIDTH - 300, WIN_HEIGHT - 70))
+
+        self.level_text(16, f"Starting in {self.instruction_timer / 1000:.1f}s...", C_YELLOW, (WIN_WIDTH / 2, WIN_HEIGHT - 30), center=True)
