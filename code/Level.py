@@ -179,8 +179,8 @@ class Level:
         self.window.blit(overlay, (0, WIN_HEIGHT - 120))
 
         # Player 1 Instructions
-        self.level_text(18, "P1: Walk: ↑ ↓ ← →", C_WHITE, (50, WIN_HEIGHT - 100))
-        self.level_text(18, "P1: Run: R.CTRL + ↑ ↓ ← →", C_WHITE, (50, WIN_HEIGHT - 70))
+        self.level_text(18, "P1: Walk: ^ v < >", C_WHITE, (50, WIN_HEIGHT - 100))
+        self.level_text(18, "P1: Run: R.CTRL + ^ v < >", C_WHITE, (50, WIN_HEIGHT - 70))
 
         # Player 2 Instructions (if mode requires)
         if self.game_mode in [MENU_OPTION[1], MENU_OPTION[2]]:

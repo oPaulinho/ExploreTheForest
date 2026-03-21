@@ -45,7 +45,7 @@ class Menu:
                 self.menu_text(20, MENU_OPTION[i], color, ((WIN_WIDTH / 2), 200 + 25 * i))
                 
             # Render RU information / Renderiza informações do RU
-            self.menu_text(12, "Genilson Paulo da Silva. RU:5120863", C_WHITE, (WIN_WIDTH - 150, WIN_HEIGHT - 20))
+            self.menu_text(12, "Genilson Paulo da Silva. RU:5120863", C_WHITE, (160, WIN_HEIGHT - 20))
 
             pygame.display.flip()
 
