@@ -43,7 +43,8 @@ class Level:
         
         # Phase settings (Morning/Night) / Configurações de fase
         self.message_timer = 3000
-        self.instruction_timer = 5000  # 5-second initial pause for controls / Pausa inicial para controles
+        # Instructions only show in Level 1 / Instruções aparecem apenas no Level 1
+        self.instruction_timer = 5000 if name == 'Level1' else 0
         if name == 'Level1':
             self.message = "Welcome! Started the Morning. Good luck!"
             self.score_mult = 1
